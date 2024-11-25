@@ -8,7 +8,7 @@ fun main() {
     print("Introduzca otra palabra: ")
     val palabra2= palabras.nextLine()
     anagrama=anagramas(palabra1,palabra2)
-    print("Las palabras $")
+    print("Las palabras $palabra1 y $palabra2 son anagramas?: $anagrama")
 
 
     }

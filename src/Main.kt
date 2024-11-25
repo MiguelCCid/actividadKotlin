@@ -1,22 +1,18 @@
 import java.util.*
 
 fun main() {
-    val palabras= Scanner(System.`in`)
-    val anagrama: Boolean
-    print("Introduzca una palabra: ")
-    val palabra1= palabras.nextLine()
-    print("Introduzca otra palabra: ")
-    val palabra2= palabras.nextLine()
-    anagrama=anagramas(palabra1,palabra2)
-    print("Las palabras $palabra1 y $palabra2 son anagramas?: $anagrama")
+val a="{a + b [c] * (2x2)}}}}"
+val b="{ [ a * ( c + d ) ] - 5 }"
+val c="{ a * ( c + d ) ] - 5 }"
+val d="{a^4 + (((ax4)}"
+val e="{ ] a * ( c + d ) + ( 2 - 3 )[ - 5 }"
+val f="{{{{{{(}}}}}}"
+val g="(a"
 
+}
 
-    }
-    fun anagramas(palabra1:String, palabra2: String): Boolean{
-        if (palabra1.length != palabra2.length || palabra1==palabra2){
-            return false
-        }
-        return palabra1.toCharArray().sorted() == palabra2.toCharArray().sorted()
+fun comprobar(expresion: String): Boolean{
+    for(i: Int in expresion.length)
 }
 
 

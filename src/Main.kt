@@ -13,7 +13,7 @@ fun main() {
 
     }
     fun anagramas(palabra1:String, palabra2: String): Boolean{
-        if (palabra1.length != palabra2.length){
+        if (palabra1.length != palabra2.length || palabra1==palabra2){
             return false
         }
         return palabra1.toCharArray().sorted() == palabra2.toCharArray().sorted()

@@ -1,69 +1,84 @@
+import javax.swing.text.html.StyleSheet.BoxPainter
+
 fun main() {
-    val atleta:List<accion> = listOf(accion.correr, accion.saltar, accion.saltar, accion.correr)
-    val carrera:List<carrera> = listOf(carrera.suelo, carrera.valla, carrera.suelo, carrera.suelo, carrera.valla, carrera.valla, carrera.valla)
-
-    println(dibujarCarrera(atleta, carrera) + " "+ completaCarrera(atleta,carrera))
-}
-enum class accion(val action:String){
-    correr("correr"),
-    saltar("saltar")
-}
-
-enum class carrera(val momento:String){
-    suelo("_"),
-    valla("|")
+    val tabla1: Array<Array<String>> = arrayOf(arrayOf("X","O","X"), arrayOf("O","X","O"), arrayOf("O","O","X"))
+    val tabla2: Array<Array<String>> = arrayOf(arrayOf("","O","X"), arrayOf("","X","O"), arrayOf("","O","X"))
+    val tabla3: Array<Array<String>> = arrayOf(arrayOf("O","O","O"), arrayOf("O","X","X"), arrayOf("O","X","X"))
+    val tabla4: Array<Array<String>> = arrayOf(arrayOf("O","O","X"), arrayOf("X","X","O"), arrayOf("X","X","X"))
+    println(comprobarResultado(tabla1))
+    println(comprobarResultado(tabla2))
+    println(comprobarResultado(tabla3))
+    println(comprobarResultado(tabla4))
 }
 
-fun completaCarrera(atleta: List<accion>, carrera: List<carrera>): Boolean{
-    val longitudCarrera: Int = carrera.size
-    var obstaculosBien :Int = 0
-    if(atleta.size!=carrera.size){
-        return false
-    }
-
-    for (x:Int in 0 ..longitudCarrera-1){
-        if (atleta[x].action == "correr" && carrera[x].momento == "_" || atleta[x].action == "saltar" && carrera[x].momento == "|" ){
-            obstaculosBien++
+fun comprobarResultado(tabla: Array<Array<String>>):String{
+    var ganaO: Boolean = false
+    var ganaX: Boolean = false
+    var cantidadX:Int=0
+    var cantidadO:Int=0
+    var diferenciaDeXyO: Int
+    for (x in 0 ..2) {
+        if (tabla[x][0] == tabla[x][1] && tabla[x][1] == tabla[x][2] && tabla[x][0] != "") {
+            if (tabla[x][0] == "X") {
+                ganaX = true
+            } else if (tabla[x][0] == "O") {
+                ganaO = true
+            }
         }
 
+        if (tabla[0][x] == tabla[1][x] && tabla[1][x] == tabla[2][x] && tabla[0][x] != "") {
+            if (tabla[0][x] == "X"){
+                ganaX = true
+            } else if (tabla[0][x] == "O"){
+                ganaO = true
+            }
+        }
     }
-    if (obstaculosBien==longitudCarrera){
-        return true
+
+    if (tabla[0][0] == tabla[1][1] && tabla[1][1] == tabla[2][2] && tabla[0][0] != "") {
+        if (tabla[0][0] == "X"){
+            ganaX = true
+        } else if (tabla[0][0] == "O") {
+            ganaO = true
+        }
+    }
+    if (tabla[0][2] == tabla[1][1] && tabla[1][1] == tabla[2][0] && tabla[0][2] != "") {
+        if (tabla[0][2] == "X") {
+            ganaX = true
+        } else if (tabla[0][2] == "O"){
+            ganaO = true
+        }
+    }
+
+    for (x in 0..2) {
+        for (y in 0..2) {
+            if (tabla[x][y] == "X") {
+                cantidadX++
+            } else if (tabla[x][y] == "O"){
+                cantidadO++
+            }
+         }
+    }
+    if (cantidadO>cantidadX){
+        diferenciaDeXyO=cantidadO-cantidadX
     } else {
-        return false
+        diferenciaDeXyO=cantidadX-cantidadO
+    }
+
+    if(ganaX==true && ganaO==true || diferenciaDeXyO!=1){
+        return "Nulo"
+    } else if (ganaX==false && ganaO==false){
+        return "Empate"
+    } else if (ganaX==true && ganaO==false){
+        return "X"
+    } else if (ganaO==true && ganaX==false){
+        return "O"
+    } else {
+        return "Nulo"
     }
 
 }
 
-fun dibujarCarrera(atleta: List<accion>, carrera: List<carrera>): String{
-    val longitudCarrera: Int = carrera.size -1
-    var pasosExtra: Int = if (atleta.size > carrera.size) {
-        atleta.size - carrera.size
-    } else {
-        carrera.size - atleta.size
-    }
-    var carreraDibujada: String=""
-    for (x:Int in 0 ..longitudCarrera - pasosExtra){
-       if(atleta[x].action == "correr" && carrera[x].momento == "_"){
-           carreraDibujada=carreraDibujada+"_"
-       } else if(atleta[x].action == "saltar" && carrera[x].momento == "|") {
-           carreraDibujada=carreraDibujada+"|"
-       } else if(atleta[x].action == "saltar" && carrera[x].momento == "_") {
-           carreraDibujada=carreraDibujada+"x"
-       } else if(atleta[x].action == "correr" && carrera[x].momento == "|") {
-           carreraDibujada=carreraDibujada+"/"
-       } else {
-           carreraDibujada=carreraDibujada+"?"
-       }
-
-    }
-
-    while (pasosExtra>0){
-        carreraDibujada=carreraDibujada+"?"
-        pasosExtra--
-    }
-    return carreraDibujada
-    }
 
 
 

@@ -1,85 +1,143 @@
-import javax.swing.text.html.StyleSheet.BoxPainter
-
 fun main() {
-    val tabla1: Array<Array<String>> = arrayOf(arrayOf("X","O","X"), arrayOf("O","X","O"), arrayOf("O","O","X"))
-    val tabla2: Array<Array<String>> = arrayOf(arrayOf("","O","X"), arrayOf("","X","O"), arrayOf("","O","X"))
-    val tabla3: Array<Array<String>> = arrayOf(arrayOf("O","O","O"), arrayOf("O","X","X"), arrayOf("O","X","X"))
-    val tabla4: Array<Array<String>> = arrayOf(arrayOf("O","O","X"), arrayOf("X","X","O"), arrayOf("X","X","X"))
-    println(comprobarResultado(tabla1))
-    println(comprobarResultado(tabla2))
-    println(comprobarResultado(tabla3))
-    println(comprobarResultado(tabla4))
+    val x=0
+    println("Introduzca la capacidad de la agenda")
+    var capacidadAgenda = readLine()?.toInt() ?: 10
+    val agenda: Array<Contacto?> = Array(capacidadAgenda){null}
+    while (x==0){
+        menu()
+        println("Escriba una de las opciones")
+        var opcion = readLine()?.toInt()
+        when(opcion){
+            1 -> anadirContacto(agenda)
+            2 -> listarContactos(agenda)
+            3 -> buscarContacto(agenda)
+            4 -> existeContacto(agenda)
+            5 -> eliminarContacto(agenda)
+            6 -> numeroDeHuecosLibres(agenda)
+            7 -> comprobarAgendaLlena(agenda)
+            8 -> break
+            else -> println("Introduzca un numero de las opciones porfavor")
+        }
+    }
 }
 
-fun comprobarResultado(tabla: Array<Array<String>>):String{
-    var ganaO: Boolean = false
-    var ganaX: Boolean = false
-    var cantidadX:Int=0
-    var cantidadO:Int=0
-    var diferenciaDeXyO: Int
-    for (x in 0 ..2) {
-        if (tabla[x][0] == tabla[x][1] && tabla[x][1] == tabla[x][2] && tabla[x][0] != "") {
-            if (tabla[x][0] == "X") {
-                ganaX = true
-            } else if (tabla[x][0] == "O") {
-                ganaO = true
-            }
-        }
-
-        if (tabla[0][x] == tabla[1][x] && tabla[1][x] == tabla[2][x] && tabla[0][x] != "") {
-            if (tabla[0][x] == "X"){
-                ganaX = true
-            } else if (tabla[0][x] == "O"){
-                ganaO = true
-            }
-        }
-    }
-
-    if (tabla[0][0] == tabla[1][1] && tabla[1][1] == tabla[2][2] && tabla[0][0] != "") {
-        if (tabla[0][0] == "X"){
-            ganaX = true
-        } else if (tabla[0][0] == "O") {
-            ganaO = true
-        }
-    }
-    if (tabla[0][2] == tabla[1][1] && tabla[1][1] == tabla[2][0] && tabla[0][2] != "") {
-        if (tabla[0][2] == "X") {
-            ganaX = true
-        } else if (tabla[0][2] == "O"){
-            ganaO = true
+fun menu(){
+    println("------------------------")
+    println("1.Añadir Contacto")
+    println("2.Listar Contactos")
+    println("3.Buscar Contacto")
+    println("4.Existe Contacto")
+    println("5.Eliminar Contacto")
+    println("6.Contactos Disponibles")
+    println("7.Agenda llena")
+    println("8.Salir")
+    println("------------------------")
+}
+fun anadirContacto(agenda:Array<Contacto?>){
+    var contactoExiste: Boolean
+    println("Escriba el nombre")
+    var nombre = readLine()
+    println("Escriba el numero")
+    var numero = readLine()
+    for (i in agenda) {
+        if (nombre == i?.nombre) {
+            contactoExiste = true
+            println("El contacto con ese nombre ya existe.")
+            return
         }
     }
 
-    for (x in 0..2) {
-        for (y in 0..2) {
-            if (tabla[x][y] == "X") {
-                cantidadX++
-            } else if (tabla[x][y] == "O"){
-                cantidadO++
-            }
-         }
+    for (x in agenda.indices) {
+        if (agenda[x] == null) {
+            agenda[x] = Contacto(nombre, numero)
+            println("Se ha añadido el contacto.")
+            return
+        }
     }
-    if (cantidadO>cantidadX){
-        diferenciaDeXyO=cantidadO-cantidadX
-    } else {
-        diferenciaDeXyO=cantidadX-cantidadO
-    }
-
-    if(ganaX==true && ganaO==true || diferenciaDeXyO!=1){
-        return "Nulo"
-    } else if (ganaX==false && ganaO==false){
-        return "Empate"
-    } else if (ganaX==true && ganaO==false){
-        return "X"
-    } else if (ganaO==true && ganaX==false){
-        return "O"
-    } else {
-        return "Nulo"
-    }
+    println("La agenda está llena. No se pueden meter más contactos.")
 
 }
+fun listarContactos(agenda: Array<Contacto?>){
+    for (x in agenda){
+        if (x!=null) {
+            println("Nombre: ${x.nombre}, Telefono: ${x.telefono}")
+        }
+    }
+}
 
+fun buscarContacto(agenda: Array<Contacto?>){
+    var contactoEncontrado: Boolean = false
+    println("Escriba un nombre")
+    var nombre = readLine()
+    for (i in agenda) {
+        if (nombre == i?.nombre) {
+            contactoEncontrado = true
+            println("Su telefono es: ${i?.telefono}")
+            break
+        }
+    }
+    if (contactoEncontrado==false){
+        println("No se ha encontrado el contacto")
+    }
+}
 
+fun existeContacto(agenda: Array<Contacto?>){
+    var contactoEncontrado: Boolean = false
+    println("Escriba un nombre")
+    var nombre = readLine()
+    for (i in agenda) {
+        if (nombre == i?.nombre) {
+            contactoEncontrado = true
+        }
+    }
+    if (contactoEncontrado){
+        println("Existe contacto")
+    } else {
+        println("No existe contacto")
+    }
+}
+
+fun eliminarContacto(agenda: Array<Contacto?>){
+    var contactoEncontrado: Boolean = false
+    println("Escriba un nombre")
+    var nombre = readLine()
+
+    for (i in agenda.indices) {
+        if (agenda[i]?.nombre == nombre) {
+            agenda[i] = null
+            contactoEncontrado = true
+            println("Se ha eliminado el contacto")
+            break
+        }
+    }
+    if (contactoEncontrado==false){
+        println("No se ha eliminado el contacto")
+    }
+}
+
+fun numeroDeHuecosLibres(agenda: Array<Contacto?>){
+    var huecosLibres=0
+    for (i in agenda) {
+        if (i==null) {
+            huecosLibres++
+        }
+    }
+    println("Hay $huecosLibres contacto/s libre/s")
+}
+
+fun comprobarAgendaLlena(agenda: Array<Contacto?>){
+    var huecosLibres=0
+    for (i in agenda) {
+        if (i==null) {
+            huecosLibres++
+        }
+    }
+    if (huecosLibres==0){
+        println("La agenda está llena")
+    } else {
+        println("Aun se pueden meter contactos")
+    }
+}
 
 
 
